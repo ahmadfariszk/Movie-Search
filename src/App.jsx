@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import SearchBox from "./components/SearchBox";
 import Results from "./components/Results";
+import TabBar from "./components/TabBar";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -43,24 +44,6 @@ function App() {
     setCount((prevCount) => prevCount + 1);
   };
 
-  function tabsManager() {
-    const tablist = ["Movies", "Series"];
-
-    return (
-      <div className="tabBar">
-        {tablist.map((tabName) => (
-          <div
-            key={tabName}
-            className={activeTab === tabName ? "tab active" : "tab"}
-            onClick={() => setActiveTab(tabName)}
-          >
-            {tabName}
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <>
       <h1>Movie-Search</h1>
@@ -70,7 +53,7 @@ function App() {
           handleSubmit={handleSubmit}
           query={query}
         />
-        <div>{tabsManager()}</div>
+        <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
         <Results movieResults={movieResults} count={count} />
       </div>
     </>
