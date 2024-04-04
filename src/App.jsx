@@ -47,7 +47,7 @@ function App() {
           handleSubmit={handleSubmit}
           query={query}
         />
-        <div>{responseM.total_results}</div>
+        <div>{count>0 && (<>Found:</>)}{responseM.total_results}</div>
         <div>
           {responseM && responseM.results ? (
             responseM.results.map((movie) => movie.name)
@@ -56,9 +56,6 @@ function App() {
           )}
         </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
