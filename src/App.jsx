@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import SearchBox from "./components/SearchBox";
+import Results from "./components/Results";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,7 +22,7 @@ function App() {
       console.log("Hello", movieResults); //prevent code running at page start
       movieResults.results &&
         movieResults.results[4] &&
-        console.log("Bye", movieResults.results[4].name);
+        console.log("Bye", movieResults.results[4].title);
       setMovies(movieResults.results);
     }
   }, [movieResults]);
@@ -29,20 +30,19 @@ function App() {
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     // Make the fetch request with the user input
-    fetch(
+    await fetch(
       `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1`,
       options
     )
       .then((response) => response.json())
       .then((response) => setMovieResults(response))
       .catch((err) => console.error(err));
+    console.log("object")
     setCount((prevCount) => prevCount + 1);
   };
-
-  const commonURL = `https://image.tmdb.org/t/p/w300`;
 
   return (
     <>
@@ -53,38 +53,7 @@ function App() {
           handleSubmit={handleSubmit}
           query={query}
         />
-        <div>
-          {count > 0 && <>Found: </>}
-          {movieResults.total_results}
-        </div>
-        <div>
-          {movieResults && movieResults.results ? (
-            movieResults.results.map((show) => (
-              <div key={show.id}>
-                {show.media_type == `movie` && (
-                  <>
-                    <div>
-                      {show.id}|{show.title} | {show.original_title} | {show.media_type}
-                    </div>
-                    {<img width="300" src={show.poster_path===null?(`https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`):(commonURL+show.poster_path)}></img>}
-                  </>
-                )}
-                {show.media_type == `tv` && (
-                  <div>
-                    {show.name} | {show.original_name} | {show.media_type}
-                  </div>
-                )}
-                {show.media_type == `person` && (
-                  <div>
-                    {show.name} | {show.original_name} | {show.media_type}
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>No results found</p>
-          )}
-        </div>
+        <Results movieResults={movieResults} count={count} />
       </div>
     </>
   );
