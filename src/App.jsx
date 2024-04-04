@@ -5,7 +5,7 @@ import SearchBox from "./components/SearchBox";
 function App() {
   const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
-  const [responseM, setResponseM] = useState({});
+  const [movieResults, setMovieResults] = useState({});
   const [movies, setMovies] = useState([]);
 
   const options = {
@@ -15,12 +15,16 @@ function App() {
       Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     },
   };
-  
+
   useEffect(() => {
-    if (count>0){console.log("Hello", responseM); //prevent code running at page start
-    responseM.results && responseM.results[4] && console.log("Bye", responseM.results[4].name);
-    setMovies(responseM.results);}
-  }, [responseM]);
+    if (count > 0) {
+      console.log("Hello", movieResults); //prevent code running at page start
+      movieResults.results &&
+        movieResults.results[4] &&
+        console.log("Bye", movieResults.results[4].name);
+      setMovies(movieResults.results);
+    }
+  }, [movieResults]);
 
   const handleInputChange = (event) => {
     setQuery(event.target.value);
@@ -33,10 +37,12 @@ function App() {
       options
     )
       .then((response) => response.json())
-      .then((response) => setResponseM(response))
+      .then((response) => setMovieResults(response))
       .catch((err) => console.error(err));
-    setCount(prevCount=>prevCount+1);
+    setCount((prevCount) => prevCount + 1);
   };
+
+  const commonURL = `https://image.tmdb.org/t/p/w300`;
 
   return (
     <>
@@ -47,10 +53,34 @@ function App() {
           handleSubmit={handleSubmit}
           query={query}
         />
-        <div>{count>0 && (<>Found:</>)}{responseM.total_results}</div>
         <div>
-          {responseM && responseM.results ? (
-            responseM.results.map((movie) => movie.name)
+          {count > 0 && <>Found: </>}
+          {movieResults.total_results}
+        </div>
+        <div>
+          {movieResults && movieResults.results ? (
+            movieResults.results.map((show) => (
+              <div key={show.id}>
+                {show.media_type == `movie` && (
+                  <>
+                    <div>
+                      {show.id}|{show.title} | {show.original_title} | {show.media_type}
+                    </div>
+                    {<img width="300" src={show.poster_path===null?(`https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`):(commonURL+show.poster_path)}></img>}
+                  </>
+                )}
+                {show.media_type == `tv` && (
+                  <div>
+                    {show.name} | {show.original_name} | {show.media_type}
+                  </div>
+                )}
+                {show.media_type == `person` && (
+                  <div>
+                    {show.name} | {show.original_name} | {show.media_type}
+                  </div>
+                )}
+              </div>
+            ))
           ) : (
             <p>No results found</p>
           )}
