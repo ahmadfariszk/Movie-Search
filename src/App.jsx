@@ -23,7 +23,6 @@ function App() {
       movieResults.results &&
         movieResults.results[4] &&
         console.log("Bye", movieResults.results[4].title);
-      setMovies(movieResults.results);
     }
   }, [movieResults]);
 

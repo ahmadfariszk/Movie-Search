@@ -1,0 +1,27 @@
+.found {
+  margin: 1rem;
+}
+.resultsContainer{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+.resultCard {
+  display: flex;
+  margin: 1rem;
+}
+.poster {
+  /* width: 300px; */
+
+  height: 12.5rem;
+}
+.info{
+    text-align: left;
+    padding-left: 16px;
+}
+.mediaType{
+    color: gray;
+}
+.title{
+    font-weight: 700;
+    font-size: 2rem;
+}

@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import "../styles/Results.css";
 
 function Results({ movieResults, count }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
+
   function showImage(multi) {
     const imagePath = () => {
       console.log("image path");
@@ -13,47 +15,35 @@ function Results({ movieResults, count }) {
       }
       return `https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`;
     };
-    return <img width="300" src={imagePath()}></img>;
+    return <img className="poster" src={imagePath()}></img>;
   } //TODO: seperate the no image available for person and movies/tv
 
   return (
     <div>
-      <div>
+      <div className="found">
         {count > 0 && <>Found: </>}
         {movieResults.total_results}
       </div>
-      {movieResults && movieResults.results ? (
-        movieResults.results.map((multi) => (
-          <div key={multi.id}>
-            {multi.media_type == `movie` && (
-              <>
-                <div>
-                  {multi.id}|{multi.title} | {multi.original_title} |{" "}
-                  {multi.media_type}
+      {movieResults && movieResults.results ? ( //checks if there are any results
+        <div className="resultsContainer">
+          {movieResults.results.map((multi) => (
+            <div key={multi.id} className="resultCard">
+              {showImage(multi)}
+              <div className="info">
+                <div className="mediaType">{multi.media_type}</div>
+                <div className="title">
+                  {multi.media_type === `movie` ? multi.title : multi.name}
                 </div>
-                {showImage(multi)}
-              </>
-            )}
-            {multi.media_type == `tv` && (
-              <>
-                <div>
-                  {multi.id}|{multi.name} | {multi.original_name} |{" "}
-                  {multi.media_type}
+                <div className="oriTitle">
+                  {multi.media_type === `movie`
+                    ? multi.original_title
+                    : multi.original_name}
                 </div>
-                {showImage(multi)}
-              </>
-            )}
-            {multi.media_type == `person` && (
-              <>
-                <div>
-                  {multi.id}|{multi.name} | {multi.original_name} |{" "}
-                  {multi.media_type}
-                </div>
-                {showImage(multi)}
-              </>
-            )}
-          </div>
-        ))
+                <div>{multi.id}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <p>No results found</p>
       )}
