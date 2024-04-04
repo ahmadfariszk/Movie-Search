@@ -17,6 +17,7 @@ function App() {
       Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     },
   };
+  useEffect(() => {if(query!==""){getResults(); console.log("find me")}}, [activeTab]);
 
   useEffect(() => {
     if (count > 0) {
@@ -26,20 +27,28 @@ function App() {
         console.log("Bye", movieResults.results[4].title);
     }
   }, [movieResults]);
-
+  
+  function getResults(){
+    const searchType = () => {if (activeTab === "Movies") {
+        return "movie";
+      } else if (activeTab === "Series") {
+        return "tv";
+      }}      
+    fetch(
+      `https://api.themoviedb.org/3/search/${searchType()}?query=${query}&include_adult=false&language=en-US&page=1`,
+      options
+    )
+      .then((response) => response.json())
+      .then((response) => setMovieResults(response))
+      .catch((err) => console.error(err));
+  }
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Make the fetch request with the user input
-    await fetch(
-      `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => setMovieResults(response))
-      .catch((err) => console.error(err));
+    await getResults();
     console.log("object");
     setCount((prevCount) => prevCount + 1);
   };
