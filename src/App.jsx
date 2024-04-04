@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState({});
-  const [movies, setMovies] = useState([]);
+  const [activeTab, setActiveTab] = useState("Movies");
 
   const options = {
     method: "GET",
@@ -29,7 +29,7 @@ function App() {
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Make the fetch request with the user input
     await fetch(
@@ -39,9 +39,27 @@ function App() {
       .then((response) => response.json())
       .then((response) => setMovieResults(response))
       .catch((err) => console.error(err));
-    console.log("object")
+    console.log("object");
     setCount((prevCount) => prevCount + 1);
   };
+
+  function tabsManager() {
+    const tablist = ["Movies", "Series"];
+
+    return (
+      <div className="tabBar">
+        {tablist.map((tabName) => (
+          <div
+            key={tabName}
+            className={activeTab === tabName ? "tab active" : "tab"}
+            onClick={() => setActiveTab(tabName)}
+          >
+            {tabName}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -52,6 +70,7 @@ function App() {
           handleSubmit={handleSubmit}
           query={query}
         />
+        <div>{tabsManager()}</div>
         <Results movieResults={movieResults} count={count} />
       </div>
     </>
