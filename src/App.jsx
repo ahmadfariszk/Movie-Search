@@ -17,7 +17,12 @@ function App() {
       Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     },
   };
-  useEffect(() => {if(query!==""){getResults(); console.log("find me")}}, [activeTab]);
+  useEffect(() => {
+    if (query !== "") {
+      getResults();
+      console.log("find me");
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (count > 0) {
@@ -27,13 +32,15 @@ function App() {
         console.log("Bye", movieResults.results[4].title);
     }
   }, [movieResults]);
-  
-  function getResults(){
-    const searchType = () => {if (activeTab === "Movies") {
+
+  function getResults() {
+    const searchType = () => {
+      if (activeTab === "Movies") {
         return "movie";
       } else if (activeTab === "Series") {
         return "tv";
-      }}      
+      }
+    };
     fetch(
       `https://api.themoviedb.org/3/search/${searchType()}?query=${query}&include_adult=false&language=en-US&page=1`,
       options
@@ -63,7 +70,11 @@ function App() {
           query={query}
         />
         <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <Results movieResults={movieResults} count={count} />
+        <Results
+          movieResults={movieResults}
+          count={count}
+          activeTab={activeTab}
+        />
       </div>
     </>
   );

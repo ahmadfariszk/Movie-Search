@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Results.css";
 
-function Results({ movieResults, count }) {
+function Results({ movieResults, count, activeTab }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
 
-  function showImage(multi) {
+  function showImage(media) {
     const imagePath = () => {
       console.log("image path");
-      if (multi.poster_path) {
-        return `${commonURL}${multi.poster_path}`;
+      if (media.poster_path) {
+        return `${commonURL}${media.poster_path}`;
       }
-      if (multi.profile_path) {
-        return `${commonURL}${multi.profile_path}`;
+      if (media.profile_path) {
+        return `${commonURL}${media.profile_path}`;
       }
       return `https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`;
     };
@@ -26,20 +26,20 @@ function Results({ movieResults, count }) {
       </div>
       {movieResults && movieResults.results ? ( //checks if there are any results
         <div className="resultsContainer">
-          {movieResults.results.map((multi) => (
-            <div key={multi.id} className="resultCard">
-              {showImage(multi)}
+          {movieResults.results.map((media) => (
+            <div key={media.id} className="resultCard">
+              {showImage(media)}
               <div className="info">
-                <div className="mediaType">{multi.media_type}</div>
+                <div className="mediaType">{media.media_type}</div>
                 <div className="title">
-                  {multi.media_type === `movie` ? multi.title : multi.name}
+                  {activeTab === `Movies` ? media.title : media.name}
                 </div>
                 <div className="oriTitle">
-                  {multi.media_type === `movie`
-                    ? multi.original_title
-                    : multi.original_name}
+                  {activeTab === `Movies`
+                    ? media.original_title
+                    : media.original_name}
                 </div>
-                <div>{multi.id}</div>
+                <div>{media.id}</div>
               </div>
             </div>
           ))}
