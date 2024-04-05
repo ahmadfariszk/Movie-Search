@@ -1,7 +1,7 @@
 import React from "react";
 
 function SearchBox(props) {
-  const { handleInputChange, handleSubmit,query } = props;
+  const { handleInputChange, handleSubmit, query } = props;
   return (
     <>
       <form onSubmit={handleSubmit}>

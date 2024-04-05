@@ -9,6 +9,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState({});
   const [activeTab, setActiveTab] = useState("Movies");
+  const [pageNumber, setPageNumber] = useState(1);
 
   const options = {
     method: "GET",
@@ -22,7 +23,7 @@ function App() {
       getResults();
       console.log("find me");
     }
-  }, [activeTab]);
+  }, [activeTab, pageNumber]);
 
   useEffect(() => {
     if (count > 0) {
@@ -42,7 +43,7 @@ function App() {
       }
     };
     fetch(
-      `https://api.themoviedb.org/3/search/${searchType()}?query=${query}&include_adult=false&language=en-US&page=1`,
+      `https://api.themoviedb.org/3/search/${searchType()}?query=${query}&include_adult=false&language=en-US&page=${pageNumber}`,
       options
     )
       .then((response) => response.json())
@@ -59,6 +60,35 @@ function App() {
     console.log("object");
     setCount((prevCount) => prevCount + 1);
   };
+  const handlePageChange = (event) => {
+    setPageNumber(event.target.value);
+  };
+  useEffect(() => {
+    console.log("Page:", pageNumber);
+  }, [pageNumber]);
+  function pagination() {
+    let pageList = [];
+    for (let i = 1; i <= movieResults.total_pages; i++) {
+      pageList.push(i);
+    }
+
+    console.log({ pageList });
+    return (
+      <>
+        <>
+          showing {movieResults.results.length} results of{" "}
+          {movieResults.total_results}
+        </>
+        <>
+          <select onChange={handlePageChange}>
+            {pageList.map((number) => (
+              <option key={number}>{number}</option>
+            ))}
+          </select>
+        </>
+      </>
+    );
+  }
 
   return (
     <>
@@ -75,6 +105,7 @@ function App() {
           count={count}
           activeTab={activeTab}
         />
+        <div>{movieResults.total_pages && pagination()} </div>
       </div>
     </>
   );
