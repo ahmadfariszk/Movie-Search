@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Results.css";
+import noImage from "../assets/No-Image-Placeholder.svg.png";
 
 function Results({ movieResults, isInitialised, activeTab }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
@@ -12,7 +13,7 @@ function Results({ movieResults, isInitialised, activeTab }) {
       if (media.profile_path) {
         return `${commonURL}${media.profile_path}`;
       }
-      return `https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png`;
+      return noImage;
     };
     return <img className="poster" src={imagePath()}></img>;
   } //TODO: seperate the no image available for person and movies/tv
