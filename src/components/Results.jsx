@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Results.css";
 import noImage from "../assets/No-Image-Placeholder.svg.png";
 
-function Results({ movieResults, isInitialised, activeTab }) {
+function Results({ resultsData, isInitialised, activeTab }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
 
   function showImage(media) {
@@ -16,17 +16,24 @@ function Results({ movieResults, isInitialised, activeTab }) {
       return noImage;
     };
     return <img className="poster" src={imagePath()}></img>;
-  } //TODO: seperate the no image available for person and movies/tv
+  }
+  function isOriginalEqual(originalTitle, title) {
+    if (originalTitle !== title) {
+      return <div className="oriTitle">{originalTitle}</div>;
+    } else {
+      return <></>;
+    }
+  }
 
   return (
     <div>
       <div className="found">
         {isInitialised > 0 && <>Found: </>}
-        {movieResults.total_results}
+        {resultsData.total_results}
       </div>
-      {movieResults && movieResults.results ? ( //checks if there are any results
+      {resultsData && resultsData.results ? ( //checks if there are any results
         <div className="resultsContainer">
-          {movieResults.results.map((media) => (
+          {resultsData.results.map((media) => (
             <div key={media.id} className="resultCard">
               {showImage(media)}
               <div className="info">
@@ -34,11 +41,9 @@ function Results({ movieResults, isInitialised, activeTab }) {
                 <div className="title">
                   {activeTab === `Movies` ? media.title : media.name}
                 </div>
-                <div className="oriTitle">
-                  {activeTab === `Movies`
-                    ? media.original_title
-                    : media.original_name}
-                </div>
+                {activeTab === `Movies`
+                  ? isOriginalEqual(media.original_title, media.title)
+                  : isOriginalEqual(media.original_name, media.name)}
                 <div>{media.id}</div>
               </div>
             </div>

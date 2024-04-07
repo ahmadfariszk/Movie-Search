@@ -11,7 +11,7 @@
   margin: 1rem;
 }
 .poster {
-  height: 12.5rem;
+  height: 15rem;
   border-radius: 7px;
 }
 .info{
@@ -23,5 +23,5 @@
 }
 .title{
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }

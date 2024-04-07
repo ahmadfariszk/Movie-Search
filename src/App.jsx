@@ -8,7 +8,7 @@ import PagesBar from "./components/PagesBar";
 function App() {
   const [isInitialised, setIsInitialised] = useState(0);
   const [query, setQuery] = useState("");
-  const [movieResults, setMovieResults] = useState({});
+  const [resultsData, setResultsData] = useState({});
   const [activeTab, setActiveTab] = useState("Movies");
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -29,7 +29,7 @@ function App() {
   }, [activeTab, pageNumber]);
 
   async function getResults() {
-    setMovieResults({});
+    setResultsData({});
     const searchType = () => {
       if (activeTab === "Movies") {
         return "movie";
@@ -42,7 +42,7 @@ function App() {
       options
     )
       .then((response) => response.json())
-      .then((response) => setMovieResults(response))
+      .then((response) => setResultsData(response))
       .catch((err) => console.error(err));
   }
   const handleInputChange = (event) => {
@@ -69,14 +69,14 @@ function App() {
         />
         <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
         <Results
-          movieResults={movieResults}
+          resultsData={resultsData}
           isInitialised={isInitialised}
           activeTab={activeTab}
         />
         <div>
-          {movieResults.total_pages && (
+          {resultsData.total_pages && (
             <PagesBar
-              movieResults={movieResults}
+              resultsData={resultsData}
               handlePageChange={handlePageChange}
             />
           )}{" "}
