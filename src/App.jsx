@@ -5,7 +5,7 @@ import Results from "./components/Results";
 import TabBar from "./components/TabBar";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isInitialised, setIsInitialised] = useState(0);
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState({});
   const [activeTab, setActiveTab] = useState("Movies");
@@ -18,23 +18,18 @@ function App() {
       Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
     },
   };
+
+  //useEffect declarations
+  //Get new response when tab or page number changes
   useEffect(() => {
     if (query !== "") {
       getResults();
-      console.log("find me");
     }
   }, [activeTab, pageNumber]);
 
-  useEffect(() => {
-    if (count > 0) {
-      console.log("Hello", movieResults); //prevent code running at page start
-      movieResults.results &&
-        movieResults.results[4] &&
-        console.log("Bye", movieResults.results[4].title);
-    }
-  }, [movieResults]);
 
-  function getResults() {
+  async function getResults() {
+    setMovieResults({});
     const searchType = () => {
       if (activeTab === "Movies") {
         return "movie";
@@ -57,22 +52,17 @@ function App() {
     event.preventDefault();
     // Make the fetch request with the user input
     await getResults();
-    console.log("object");
-    setCount((prevCount) => prevCount + 1);
+    setIsInitialised((previsInitialised) => previsInitialised + 1);
   };
   const handlePageChange = (event) => {
     setPageNumber(event.target.value);
   };
-  useEffect(() => {
-    console.log("Page:", pageNumber);
-  }, [pageNumber]);
+
   function pagination() {
     let pageList = [];
     for (let i = 1; i <= movieResults.total_pages; i++) {
       pageList.push(i);
     }
-
-    console.log({ pageList });
     return (
       <>
         <>
@@ -102,7 +92,7 @@ function App() {
         <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
         <Results
           movieResults={movieResults}
-          count={count}
+          isInitialised={isInitialised}
           activeTab={activeTab}
         />
         <div>{movieResults.total_pages && pagination()} </div>

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Results.css";
 
-function Results({ movieResults, count, activeTab }) {
+function Results({ movieResults, isInitialised, activeTab }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
 
   function showImage(media) {
     const imagePath = () => {
-      console.log("image path");
       if (media.poster_path) {
         return `${commonURL}${media.poster_path}`;
       }
@@ -21,7 +20,7 @@ function Results({ movieResults, count, activeTab }) {
   return (
     <div>
       <div className="found">
-        {count > 0 && <>Found: </>}
+        {isInitialised > 0 && <>Found: </>}
         {movieResults.total_results}
       </div>
       {movieResults && movieResults.results ? ( //checks if there are any results
