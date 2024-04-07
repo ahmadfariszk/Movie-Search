@@ -2,10 +2,14 @@
   margin: 1rem;
   font-size: 1.2rem;
 }
-.resultsContainer{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+.resultsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr; /* Change to one column when width is less than 600px */
+  }
 }
+
 .resultCard {
   display: flex;
   margin: 1rem;
@@ -14,14 +18,23 @@
   height: 15rem;
   border-radius: 7px;
 }
-.info{
-    text-align: left;
-    padding-left: 16px;
+.info {
+  display: flex;
+  flex-direction: column;
+  height: 15rem;
+  text-align: left;
+  padding-left: 16px;
+  overflow:hidden;
+  text-overflow: ellipsis;
 }
-.mediaType{
-    color: gray;
+
+.title {
+  font-weight: 700;
+  font-size: 1.5rem;
 }
-.title{
-    font-weight: 700;
-    font-size: 1.5rem;
+
+.overview {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

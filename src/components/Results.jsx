@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Results.css";
 import noImage from "../assets/No-Image-Placeholder.svg.png";
+import { Star } from "lucide-react";
 
 function Results({ resultsData, isInitialised, activeTab }) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
@@ -17,11 +18,38 @@ function Results({ resultsData, isInitialised, activeTab }) {
     };
     return <img className="poster" src={imagePath()}></img>;
   }
-  function isOriginalEqual(originalTitle, title) {
+  function getOriginalTitle(originalTitle, title) {
+    //only returns original title if its different than the title/name
     if (originalTitle !== title) {
       return <div className="oriTitle">{originalTitle}</div>;
     } else {
       return <></>;
+    }
+  }
+  function isVoted(voteCount, voteScore) {
+    if (voteCount === 0) {
+      return (
+        <>
+          <Star size={18} strokeWidth={2} color="#686868" />
+          No votes
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Star size={18} strokeWidth={2} fill="#f3b40c" color="#614705" />{" "}
+          {voteScore}({voteCount})
+        </>
+      );
+    }
+  }
+  function formatDate(dateString) {
+    if (dateString !== "") {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "short" };
+      return date.toLocaleDateString("en-US", options);
+    } else {
+      return <>Not known</>;
     }
   }
 
@@ -37,14 +65,18 @@ function Results({ resultsData, isInitialised, activeTab }) {
             <div key={media.id} className="resultCard">
               {showImage(media)}
               <div className="info">
-                <div className="mediaType">{media.media_type}</div>
                 <div className="title">
                   {activeTab === `Movies` ? media.title : media.name}
                 </div>
                 {activeTab === `Movies`
-                  ? isOriginalEqual(media.original_title, media.title)
-                  : isOriginalEqual(media.original_name, media.name)}
-                <div>{media.id}</div>
+                  ? getOriginalTitle(media.original_title, media.title)
+                  : getOriginalTitle(media.original_name, media.name)}
+
+                <div>
+                  {isVoted(media.vote_count, media.vote_average)}, Released:{" "}
+                  {formatDate(media.release_date)}
+                </div>
+                <div className="overview">{media.overview}</div>
               </div>
             </div>
           ))}
