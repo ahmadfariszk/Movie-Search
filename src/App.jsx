@@ -3,6 +3,7 @@ import "./App.css";
 import SearchBox from "./components/SearchBox";
 import Results from "./components/Results";
 import TabBar from "./components/TabBar";
+import PagesBar from "./components/PagesBar";
 
 function App() {
   const [isInitialised, setIsInitialised] = useState(0);
@@ -26,7 +27,6 @@ function App() {
       getResults();
     }
   }, [activeTab, pageNumber]);
-
 
   async function getResults() {
     setMovieResults({});
@@ -58,28 +58,6 @@ function App() {
     setPageNumber(event.target.value);
   };
 
-  function pagination() {
-    let pageList = [];
-    for (let i = 1; i <= movieResults.total_pages; i++) {
-      pageList.push(i);
-    }
-    return (
-      <>
-        <>
-          showing {movieResults.results.length} results of{" "}
-          {movieResults.total_results}
-        </>
-        <>
-          <select onChange={handlePageChange}>
-            {pageList.map((number) => (
-              <option key={number}>{number}</option>
-            ))}
-          </select>
-        </>
-      </>
-    );
-  }
-
   return (
     <>
       <h1>Movie-Search</h1>
@@ -95,7 +73,14 @@ function App() {
           isInitialised={isInitialised}
           activeTab={activeTab}
         />
-        <div>{movieResults.total_pages && pagination()} </div>
+        <div>
+          {movieResults.total_pages && (
+            <PagesBar
+              movieResults={movieResults}
+              handlePageChange={handlePageChange}
+            />
+          )}{" "}
+        </div>
       </div>
     </>
   );
