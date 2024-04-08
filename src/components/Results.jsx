@@ -3,7 +3,13 @@ import "../styles/Results.css";
 import noImage from "../assets/No-Image-Placeholder.svg.png";
 import { Star } from "lucide-react";
 
-function Results({ resultsData, isInitialised, activeTab }) {
+function Results({
+  resultsData,
+  isInitialised,
+  activeTab,
+  movieGenres,
+  seriesGenres,
+}) {
   const commonURL = `https://image.tmdb.org/t/p/w300`;
 
   function showImage(media) {
@@ -52,6 +58,31 @@ function Results({ resultsData, isInitialised, activeTab }) {
       return <>Not known</>;
     }
   }
+  function getGenres(genreIDs) {
+    if(genreIDs.length==0){return <>{" None "}</>}
+    if (activeTab === `Movies`) {
+      return (
+        <>
+          {`${getGenreByType(movieGenres, genreIDs)}`}
+        </>
+      );
+    } else if (activeTab===`Series`){return (
+      <>
+        {`${getGenreByType(seriesGenres, genreIDs)}`}
+      </>
+    );}
+  }
+  function getGenreByType(mediaGenre, genreIDs) {
+    return genreIDs.map((genreID) => {
+      let genreName = "";
+      mediaGenre.genres.map((genreList) => {
+        if (genreID === genreList.id) {
+          genreName = genreList.name;
+        }
+      });
+      return ` ${genreName}`;
+    })
+  }
 
   return (
     <div>
@@ -77,6 +108,7 @@ function Results({ resultsData, isInitialised, activeTab }) {
                   {formatDate(media.release_date)}
                 </div>
                 <div className="overview">{media.overview}</div>
+                <div>Genre: {getGenres(media.genre_ids)}</div>
               </div>
             </div>
           ))}

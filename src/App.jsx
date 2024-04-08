@@ -11,6 +11,8 @@ function App() {
   const [resultsData, setResultsData] = useState({});
   const [activeTab, setActiveTab] = useState("Movies");
   const [pageNumber, setPageNumber] = useState(1);
+  const [movieGenres, setMovieGenres] = useState({});
+  const [seriesGenres, setSeriesGenres] = useState({});
 
   const options = {
     method: "GET",
@@ -27,6 +29,21 @@ function App() {
       getResults();
     }
   }, [activeTab, pageNumber]);
+  //Get genre ID array at the start of the app.
+  useEffect(() => {
+    async function fetchGenres() {
+      fetch(`https://api.themoviedb.org/3/genre/movie/list`, options)
+        .then((response) => response.json())
+        .then((response) => setMovieGenres(response))
+        .catch((err) => console.error(err));
+
+      fetch(`https://api.themoviedb.org/3/genre/tv/list`, options)
+        .then((response) => response.json())
+        .then((response) => setSeriesGenres(response))
+        .catch((err) => console.error(err));
+    }
+    fetchGenres();
+  }, []);
 
   async function getResults() {
     setResultsData({});
@@ -72,6 +89,8 @@ function App() {
           resultsData={resultsData}
           isInitialised={isInitialised}
           activeTab={activeTab}
+          movieGenres={movieGenres}
+          seriesGenres={seriesGenres}
         />
         <div>
           {resultsData.total_pages && (

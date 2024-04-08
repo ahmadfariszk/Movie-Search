@@ -27,14 +27,17 @@
   overflow:hidden;
   text-overflow: ellipsis;
 }
+.info div{
+  /* flex-grow: 1; */
+}
 
 .title {
   font-weight: 700;
   font-size: 1.5rem;
 }
 
-.overview {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.info > .overview {
+  flex-grow: 1;
+  overflow: auto;
+  /* text-overflow: ellipsis; */
 }
